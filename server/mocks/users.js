@@ -5,7 +5,12 @@ module.exports = function(app) {
 
     // Use the body-parser library in this service
     var bodyParser = require('body-parser');
-    app.use(bodyParser.json());
+
+    // Oour request will provide content type <application/vnd.api+json> which is json api compliant
+    // so need to tell body-parser to accept that type instead of default <application/json> 
+    app.use(bodyParser.json({
+        type: 'application/*+json'
+    }));
 
     // Create an embedded table using NEDB if it doesn't yet exist
     var nedb = require('nedb');
@@ -24,34 +29,23 @@ module.exports = function(app) {
         userDB.find({}).sort({ id: -1 }).limit(1).exec(function(err, users) {
             console.log('Request body', req.body);
             try {
-                if (users.length != 0)
-                    req.body.user.id = users[0].id + 1;
-                else
-                    req.body.user.id = 1;
+                var user = req.body;
+                if (users.length != 0) {
+                    user.id = users[0].id + 1;
+                } else {
+                    user.id = 1;
+                }
                 // Insert the new record into our datastore, and return the newly
                 // created record to Ember Data
-                userDB.insert(req.body.user, function(err, newUser) {
+                userDB.insert(user, function(err, newUser) {
+                    newUser.data.id = user.id;
                     res.status(201);
-                    res.send(
-                        JSON.stringify({
-                            user: newUser
-                        }));
-                });
-                if (users.length != 0)
-                    req.body.user.id = users[0].id + 1;
-                else
-                    req.body.user.id = 1;
-                // Insert the new record into our datastore, and return the newly
-                // created record to Ember Data
-                userDB.insert(req.body.user, function(err, newUser) {
-                    res.status(201);
-                    res.send(
-                        JSON.stringify({
-                            user: newUser
-                        }));
+                    res.send(newUser);
                 });
             } catch (e) {
-                console.log(e)
+                console.log(e);
+                res.status(500);
+                res.send(e);
             }
         })
     });
