@@ -17,8 +17,13 @@ module.exports = function(app) {
     var userDB = new nedb({ filename: 'users', autoload: true });
 
     usersRouter.get('/', function(req, res) {
-        res.send({
-            'users': []
+        var query = { data: {attributes:req.query} };
+        console.log(query.data.attributes);
+        userDB.find({"data.attributes" : query.data.attributes}).exec(function(error, users) {
+          var data = users.map( attrs => ( {type: 'users', id: attrs.id, attributes: attrs } ));
+          res.send({
+              data: data
+          });
         });
     });
 
