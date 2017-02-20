@@ -32,8 +32,9 @@ module.exports = function(app) {
                 }
                 notebookDB.insert(noteBook, function(err, newNotebook) {
                     console.log('Done saving noteBook',newNotebook);
+                    var compliantJsonApiData = [newNotebook].map(attrs => ({ type: 'notebooks', id: attrs.id, attributes: attrs }));
                     res.status(201);
-                    res.send(newNotebook);
+                    res.send({data: compliantJsonApiData[0]});
                 });
             })
     });

@@ -1,4 +1,1 @@
-{"data":{"attributes":{"title":"Book 1"},"relationships":{"user":{"data":{"type":"users","id":"2"}}},"type":"notebooks"},"id":4,"_id":"5TESMcozRVVIwDYI"}
-{"data":{"attributes":{"title":"Book 2"},"relationships":{"user":{"data":{"type":"users","id":"2"}}},"type":"notebooks"},"id":7,"_id":"GR5qA0cqKhda1Fod"}
-{"data":{"attributes":{"title":"Book 2"},"relationships":{"user":{"data":{"type":"users","id":"2"}}},"type":"notebooks"},"id":6,"_id":"VTyB1BGzLfmPnbJ4"}
-{"data":{"attributes":{"title":"Book 2"},"relationships":{"user":{"data":{"type":"users","id":"2"}}},"type":"notebooks"},"id":5,"_id":"tb1gKujeYRsuBpzh"}
+{"data":{"attributes":{"title":"Book 1"},"relationships":{"user":{"data":{"type":"users","id":"2"}}},"type":"notebooks"},"id":1,"_id":"ZUFPAKkCG2oTxlvZ"}

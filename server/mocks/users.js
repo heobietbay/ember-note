@@ -42,8 +42,9 @@ module.exports = function(app) {
                 // Insert the new record into our datastore, and return the newly
                 // created record to Ember Data
                 userDB.insert(user, function(err, newUser) {
+                    var compliantJsonApiData = [newUser].map(attrs => ({ type: 'users', id: attrs.id, attributes: attrs }));
                     res.status(201);
-                    res.send(newUser);
+                    res.send({data: compliantJsonApiData[0]});
                 });
             } catch (e) {
                 console.log(e);

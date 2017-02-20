@@ -29,7 +29,8 @@ module.exports = function(app) {
                 }
                 notebookDB.insert(note, function(err, newNote) {
                     res.status(201);
-                    res.send(newNote);
+                    var compliantJsonApiData = [newNote].map(attrs => ({ type: 'notes', id: attrs.id, attributes: attrs }));
+                    res.send({data: compliantJsonApiData[0]});
                 });
             })
     });
