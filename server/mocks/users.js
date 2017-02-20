@@ -17,9 +17,8 @@ module.exports = function(app) {
     var userDB = new nedb({ filename: 'users', autoload: true });
 
     usersRouter.get('/', function(req, res) {
-        var query = { data: {attributes:req.query} };
-        console.log(query.data.attributes);
-        userDB.find({"data.attributes" : query.data.attributes}).exec(function(error, users) {
+        var query = {"data.attributes" : req.query };
+        userDB.find(query).exec(function(error, users) {
           var data = users.map( attrs => ( {type: 'users', id: attrs.id, attributes: attrs } ));
           res.send({
               data: data
@@ -43,7 +42,6 @@ module.exports = function(app) {
                 // Insert the new record into our datastore, and return the newly
                 // created record to Ember Data
                 userDB.insert(user, function(err, newUser) {
-                    newUser.data.id = user.id;
                     res.status(201);
                     res.send(newUser);
                 });
