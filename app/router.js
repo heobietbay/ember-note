@@ -10,7 +10,7 @@ Router.map(function() {
   this.route('register');
   this.route('login');
   this.route('notebooks', function() {
-    this.route('notes');
+    this.route('notes', { path: '/:notebook_id/notes'});
   });
 });
 

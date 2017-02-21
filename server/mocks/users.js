@@ -2,7 +2,6 @@
 module.exports = function(app) {
 
     function toJsonApiFormat(rawArray) {
-        console.log('RAW DATA', rawArray)
         let data = !rawArray ? [] : rawArray.map(user => ({
             type: 'users',
             id: user.id,
@@ -29,12 +28,12 @@ module.exports = function(app) {
     let userDB = new nedb({ filename: 'db_file/users', autoload: true });
 
     usersRouter.get('/', function(req, res) {
-        let query = {"data.attributes" : req.query };
+        let query = { "data.attributes": req.query };
         userDB.find(query).exec(function(error, users) {
-          let data = toJsonApiFormat(users);
-          res.send({
-              data: data
-          });
+            let data = toJsonApiFormat(users);
+            res.send({
+                data: data
+            });
         });
     });
 
@@ -43,7 +42,6 @@ module.exports = function(app) {
         // Look for the most recently created record and use it to set the id
         // field of our incoming record, which is required by Ember Data
         userDB.find({}).sort({ id: -1 }).limit(1).exec(function(err, users) {
-            console.log('Request body', req.body);
             try {
                 let user = req.body;
                 if (users.length != 0) {
@@ -56,7 +54,7 @@ module.exports = function(app) {
                 userDB.insert(user, function(err, newUser) {
                     let compliantJsonApiData = toJsonApiFormat([newUser]);;
                     res.status(201);
-                    res.send({data: compliantJsonApiData[0]});
+                    res.send({ data: compliantJsonApiData[0] });
                 });
             } catch (e) {
                 console.log(e);

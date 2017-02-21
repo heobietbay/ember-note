@@ -19,17 +19,18 @@ module.exports = function(app) {
     let notesRouter = express.Router();
 
     let nedb = require('nedb');
-    let notebookDB = new nedb({ filename: 'db_file/notes', autoload: true });
+    let noteDB = new nedb({ filename: 'db_file/notes', autoload: true });
 
     notesRouter.get('/', function(req, res) {
-        noteDB.find(req.query).exec(function(error, notes) {
+        let criteria = { "data.relationships.notebook.data.id": req.query.notebook.id };
+        noteDB.find(criteria).exec(function(error, notes) {
             let data = toJsonApiFormat(notes);
             res.send({ data: data });
         });
     });
 
     notesRouter.post('/', function(req, res) {
-        notebookDB.find({}).sort({ id: -1 }).limit(1).exec(
+        noteDB.find({}).sort({ id: -1 }).limit(1).exec(
             function(err, notes) {
                 let note = req.body;
                 if (notes.length != 0) {
@@ -37,7 +38,7 @@ module.exports = function(app) {
                 } else {
                     note.id = 1;
                 }
-                notebookDB.insert(note, function(err, newNote) {
+                noteDB.insert(note, function(err, newNote) {
                     res.status(201);
                     let compliantJsonApiData = toJsonApiFormat([newNote]);
                     res.send({ data: compliantJsonApiData[0] });
@@ -62,7 +63,11 @@ module.exports = function(app) {
     });
 
     notesRouter.delete('/:id', function(req, res) {
-        res.status(204).end();
+        console.log('DEL note by id:', req.params.id);
+        noteDB.remove({ id: parseInt(req.params.id)}, {}, function(err, numRemoved) {
+            res.status(204).end();
+        });
+
     });
 
     // The POST and PUT call will not contain a request body

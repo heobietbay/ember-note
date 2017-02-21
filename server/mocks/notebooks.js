@@ -24,7 +24,6 @@ module.exports = function(app) {
     notebooksRouter.get('/', function(req, res) {
         let criteria = { "data.relationships.user.data.id": req.query.user.id };
         notebookDB.find(criteria).exec(function(error, notebooks) {
-            console.dir(notebooks);
             let data = toJsonApiFormat(notebooks);
             res.send({ data: data });
         });
@@ -49,9 +48,15 @@ module.exports = function(app) {
     });
 
     notebooksRouter.get('/:id', function(req, res) {
-        res.send({
-            'notebooks': {
-                id: req.params.id
+        console.log('Get notebook by id:', req.params.id)
+        notebookDB.find({}, function(err, notebooks) {
+            var notebook = notebooks.filter( (notebook) => { return notebook.id == req.params.id }  );
+            if (!notebook) {
+                res.status(404);
+                res.send(null);
+            } else {
+                res.status(201);
+                res.send({ data: toJsonApiFormat(notebook)[0] });
             }
         });
     });

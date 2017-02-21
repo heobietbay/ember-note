@@ -10,11 +10,13 @@ Notes
 		<ul>
 		{{#each model as |note|}}
 			<li>
-			{{#link-to 'notebooks.notes.note'}}
+			{{#link-to 'notebooks.notes' note.id}}
 			{{note.title}}
 			{{/link-to}}
 			<button {{action 'deleteNote' note}}>Delete</button>
 			</li>
+		{{else}}
+			<div>No notes found</div>
 		{{/each}}
 		</ul>
 	</div>
