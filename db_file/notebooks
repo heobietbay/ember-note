@@ -1,0 +1,2 @@
+{"data":{"attributes":{"title":"Book 1"},"relationships":{"user":{"data":{"type":"users","id":"1"}}},"type":"notebooks"},"id":1,"_id":"ZUFPAKkCG2oTxlvZ"}
+{"data":{"attributes":{"title":"Book of Man"},"relationships":{"user":{"data":{"type":"users","id":"3"}}},"type":"notebooks"},"id":2,"_id":"xEYZhQgqGTpZoLHO"}

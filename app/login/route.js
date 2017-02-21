@@ -6,10 +6,10 @@ export default Ember.Route.extend({
             this.store.query('user', {
                 name: this.controller.get('name')
             }).then((data) => {
-                if (data.get('content').get('length') !== 1) {
-                    var user = data.objectAt(0);
+                if (data.get('length') !== 0) {
+                    let user = data.objectAt(0);
                     this.controllerFor('application').set('user', user);
-                    this.transitionTo('notebooks',user.get('id'));
+                    this.transitionTo('notebooks');
                 } else {
                     console.log('unexpected query result');
                 }

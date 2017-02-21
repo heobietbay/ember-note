@@ -2,11 +2,14 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     model: function(params) {
-        return this.store.query('notebook', { user: params.user_id });
+        let user = this.controllerFor('application').get('user');
+        let criteria = {user : { id: user.id } };
+        let res = this.store.query('notebook', criteria);
+        return res;
     },
     actions: {
         addNotebook: function() {
-            var notebook = this.store.createRecord('notebook', {
+            let notebook = this.store.createRecord('notebook', {
                 title: this.controller.get('title'),
                 user: this.controllerFor('application').get('user')
             });

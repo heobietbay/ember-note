@@ -1,10 +1,22 @@
 /*jshint node:true*/
 module.exports = function(app) {
-    var express = require('express');
-    var usersRouter = express.Router();
+
+    function toJsonApiFormat(rawArray) {
+        console.log('RAW DATA', rawArray)
+        let data = !rawArray ? [] : rawArray.map(user => ({
+            type: 'users',
+            id: user.id,
+            attributes: user.data.attributes,
+            relationships: user.data.relationships
+        }));
+        return data;
+    };
+
+    let express = require('express');
+    let usersRouter = express.Router();
 
     // Use the body-parser library in this service
-    var bodyParser = require('body-parser');
+    let bodyParser = require('body-parser');
 
     // Oour request will provide content type <application/vnd.api+json> which is json api compliant
     // so need to tell body-parser to accept that type instead of default <application/json> 
@@ -13,13 +25,13 @@ module.exports = function(app) {
     }));
 
     // Create an embedded table using NEDB if it doesn't yet exist
-    var nedb = require('nedb');
-    var userDB = new nedb({ filename: 'users', autoload: true });
+    let nedb = require('nedb');
+    let userDB = new nedb({ filename: 'db_file/users', autoload: true });
 
     usersRouter.get('/', function(req, res) {
-        var query = {"data.attributes" : req.query };
+        let query = {"data.attributes" : req.query };
         userDB.find(query).exec(function(error, users) {
-          var data = users.map( attrs => ( {type: 'users', id: attrs.id, attributes: attrs } ));
+          let data = toJsonApiFormat(users);
           res.send({
               data: data
           });
@@ -33,7 +45,7 @@ module.exports = function(app) {
         userDB.find({}).sort({ id: -1 }).limit(1).exec(function(err, users) {
             console.log('Request body', req.body);
             try {
-                var user = req.body;
+                let user = req.body;
                 if (users.length != 0) {
                     user.id = users[0].id + 1;
                 } else {
@@ -42,7 +54,7 @@ module.exports = function(app) {
                 // Insert the new record into our datastore, and return the newly
                 // created record to Ember Data
                 userDB.insert(user, function(err, newUser) {
-                    var compliantJsonApiData = [newUser].map(attrs => ({ type: 'users', id: attrs.id, attributes: attrs }));
+                    let compliantJsonApiData = toJsonApiFormat([newUser]);;
                     res.status(201);
                     res.send({data: compliantJsonApiData[0]});
                 });

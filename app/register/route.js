@@ -3,11 +3,11 @@ import Ember from 'ember';
 export default Ember.Route.extend({
 	actions: {
 		addNew: function registerNewUser(){
-			var user = this.store.createRecord('user',{
+			let user = this.store.createRecord('user',{
 				name: this.controller.get('name')
 			}); 
 
-			var self = this;
+			let self = this;
 			user.save().then( () => {
 				console.log('Save successful');
 				this.controller.set('message','A new user with the name <' + this.controller.get('name') + "> was added.");

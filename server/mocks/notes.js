@@ -1,19 +1,29 @@
 /*jshint node:true*/
 module.exports = function(app) {
-    var bodyParser = require('body-parser');
+    function toJsonApiFormat(rawArray) {
+        let data = !rawArray ? [] : rawArray.map(aNote => ({
+            type: 'notes',
+            id: aNote.id,
+            attributes: aNote.data.attributes
+        }));
+        return data;
+    };
+
+
+    let bodyParser = require('body-parser');
     app.use(bodyParser.json({
         type: 'application/*+json'
     }));
 
-    var express = require('express');
-    var notesRouter = express.Router();
+    let express = require('express');
+    let notesRouter = express.Router();
 
-    var nedb = require('nedb');
-    var notebookDB = new nedb({ filename: 'notes', autoload: true });
+    let nedb = require('nedb');
+    let notebookDB = new nedb({ filename: 'db_file/notes', autoload: true });
 
     notesRouter.get('/', function(req, res) {
         noteDB.find(req.query).exec(function(error, notes) {
-            var data = !notes ? [] : notes.map(attrs => ({ type: 'notes', id: attrs.id, attributes: attrs }));
+            let data = toJsonApiFormat(notes);
             res.send({ data: data });
         });
     });
@@ -21,7 +31,7 @@ module.exports = function(app) {
     notesRouter.post('/', function(req, res) {
         notebookDB.find({}).sort({ id: -1 }).limit(1).exec(
             function(err, notes) {
-                var note = req.body;
+                let note = req.body;
                 if (notes.length != 0) {
                     note.id = notes[0].id + 1;
                 } else {
@@ -29,8 +39,8 @@ module.exports = function(app) {
                 }
                 notebookDB.insert(note, function(err, newNote) {
                     res.status(201);
-                    var compliantJsonApiData = [newNote].map(attrs => ({ type: 'notes', id: attrs.id, attributes: attrs }));
-                    res.send({data: compliantJsonApiData[0]});
+                    let compliantJsonApiData = toJsonApiFormat([newNote]);
+                    res.send({ data: compliantJsonApiData[0] });
                 });
             })
     });

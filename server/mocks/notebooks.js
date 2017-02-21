@@ -1,22 +1,31 @@
 /*jshint node:true*/
 module.exports = function(app) {
 
-    var bodyParser = require('body-parser');
+    function toJsonApiFormat(rawArray) {
+        let data = !rawArray ? [] : rawArray.map(nbook => ({
+            type: 'notebooks',
+            id: nbook.id,
+            attributes: nbook.data.attributes,
+            relationships: nbook.data.relationships
+        }));
+        return data;
+    };
+
+    let bodyParser = require('body-parser');
     app.use(bodyParser.json({
         type: 'application/*+json'
     }));
 
-    var express = require('express');
-    var notebooksRouter = express.Router();
+    let express = require('express');
+    let notebooksRouter = express.Router();
 
-    var nedb = require('nedb');
-    var notebookDB = new nedb({ filename: 'notebooks', autoload: true });
+    let nedb = require('nedb');
+    let notebookDB = new nedb({ filename: 'db_file/notebooks', autoload: true });
     notebooksRouter.get('/', function(req, res) {
-        var criteria = req.query;
-        console.log(criteria);
+        let criteria = { "data.relationships.user.data.id": req.query.user.id };
         notebookDB.find(criteria).exec(function(error, notebooks) {
-            var data = !notebooks ? [] : notebooks.map(attrs => ({ type: 'notebooks', id: attrs.id, attributes: attrs }));
-            console.log(data);
+            console.dir(notebooks);
+            let data = toJsonApiFormat(notebooks);
             res.send({ data: data });
         });
     });
@@ -24,17 +33,17 @@ module.exports = function(app) {
     notebooksRouter.post('/', function(req, res) {
         notebookDB.find({}).sort({ id: -1 }).limit(1).exec(
             function(err, notebooks) {
-                var noteBook = req.body;
+                let noteBook = req.body;
                 if (notebooks.length != 0) {
                     noteBook.id = notebooks[0].id + 1;
                 } else {
                     noteBook.id = 1;
                 }
                 notebookDB.insert(noteBook, function(err, newNotebook) {
-                    console.log('Done saving noteBook',newNotebook);
-                    var compliantJsonApiData = [newNotebook].map(attrs => ({ type: 'notebooks', id: attrs.id, attributes: attrs }));
+                    console.log('Done saving noteBook', newNotebook);
+                    let compliantJsonApiData = toJsonApiFormat([newNotebook]);
                     res.status(201);
-                    res.send({data: compliantJsonApiData[0]});
+                    res.send({ data: compliantJsonApiData[0] });
                 });
             })
     });
