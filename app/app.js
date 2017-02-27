@@ -14,7 +14,7 @@ Ember.onerror = function(error) {
             otherInformation: 'exception message'
         }
     });*/
-}
+};
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 

@@ -1,5 +1,5 @@
 <div class="col-md-12">
-Notes
+	{{model.noteBook.title}}
 </div>
 <div>
 <div class="col-md-4">
@@ -8,9 +8,9 @@ Notes
 	</div>
 	<div>
 		<ul>
-		{{#each model as |note|}}
+		{{#each model.notes as |note|}}
 			<li>
-			{{#link-to 'notebooks.notes' note.id}}
+			{{#link-to 'notebooks.view.notes' note}}
 			{{note.title}}
 			{{/link-to}}
 			<button {{action 'deleteNote' note}}>Delete</button>

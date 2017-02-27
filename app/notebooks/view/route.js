@@ -2,13 +2,17 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     model: function(params) {
-        let criteria = {notebook : { id: params.notebook_id } };
-        return this.store.query('note', criteria);
+        let noteBookId = this.paramsFor('notebooks.view').notebook_id;
+        let criteria = {notebook : { id: noteBookId } };
+        return Ember.RSVP.hash({
+            noteBook: this.store.findRecord('notebook', noteBookId),
+            notes: this.store.query('note', criteria)
+        });
     },
     actions: {
         addNote: function() {
-            let noteBookId = this.paramsFor('notebooks.notes').notebook_id;
-            console.log('1.Preparing to get notebook:', noteBookId)
+            let noteBookId = this.paramsFor('notebooks.view').notebook_id;
+            console.log('1.Preparing to get notebook:', noteBookId);
             this.store.findRecord('notebook', noteBookId).then(
                 (notebook) => {
                     console.log('2.Found note book', notebook);
