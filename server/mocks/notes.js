@@ -4,7 +4,8 @@ module.exports = function(app) {
         let data = !rawArray ? [] : rawArray.map(aNote => ({
             type: 'notes',
             id: aNote.id,
-            attributes: aNote.data.attributes
+            attributes: aNote.data.attributes,
+            relationships: aNote.data.relationships
         }));
         return data;
     };
@@ -46,6 +47,31 @@ module.exports = function(app) {
             })
     });
 
+
+    notesRouter.patch('/:id', function(req, res) {
+        var note = req.body;
+        note.id = parseInt(req.params.id);
+        noteDB.update({ id: parseInt(req.params.id) },
+            note, {},
+            function done(err, updatedNote) {
+                if (err) {
+                    console.log("An error occurs", err);
+                    res.status(500);
+                    res.send(err);
+                } else {
+                    noteDB.findOne({ id: parseInt(req.params.id) }, function(err, note) {
+                        if (!note) {
+                            res.status(404);
+                            res.send(err);
+                        } else {
+                            res.status(201);
+                            res.send({ data: toJsonApiFormat([note])[0] });
+                        }
+                    });
+                }
+            });
+    });
+
     notesRouter.get('/:id', function(req, res) {
         res.send({
             'notes': {
@@ -64,7 +90,7 @@ module.exports = function(app) {
 
     notesRouter.delete('/:id', function(req, res) {
         console.log('DEL note by id:', req.params.id);
-        noteDB.remove({ id: parseInt(req.params.id)}, {}, function(err, numRemoved) {
+        noteDB.remove({ id: parseInt(req.params.id) }, {}, function(err, numRemoved) {
             res.status(204).end();
         });
 

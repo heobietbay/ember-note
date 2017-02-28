@@ -48,11 +48,11 @@ module.exports = function(app) {
     });
 
     notebooksRouter.get('/:id', function(req, res) {
-        console.log('Get notebook by id:', req.params.id)
+        console.log('Get notebook by id:', req.params.id);
         notebookDB.findOne({id: parseInt(req.params.id)}, function(err, notebook) {
             if (!notebook) {
                 res.status(404);
-                res.send(null);
+                res.send(err);
             } else {
                 res.status(201);
                 res.send({ data: toJsonApiFormat([notebook])[0] });
