@@ -6,7 +6,7 @@ export default Ember.Component.extend({
             this.get('note').save();
         },
         closeNote: function() {
-            this.sendAction('close');
+            this.sendAction('onclose');
         }
     }
 });
