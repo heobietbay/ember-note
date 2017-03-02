@@ -1,0 +1,18 @@
+<div>
+	<div class="col-md-3">
+	<div>Employee Type Maintenance</div>
+	<div>
+		Name: {{input value=name}}
+		<button {{action 'add'}}>Add</button>
+	</div>
+	<div>
+		<ul>
+		{{#each model as |employeeType|}}		
+			<li>{{employeeType.name}}</li>
+		{{else}}
+			<div>No types found</div>
+		{{/each}}
+		</ul>
+	</div>
+	</div>
+</div>

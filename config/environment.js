@@ -41,6 +41,7 @@ module.exports = function(environment) {
   if (environment === 'production') {
 
   }
+  ENV.APP.usingCors = true;
 
   return ENV;
 };

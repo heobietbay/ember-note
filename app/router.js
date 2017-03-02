@@ -7,13 +7,16 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-    this.route('register');
-    this.route('login');
-    this.route('notebooks', function() {
-        this.route('view', { path: '/:notebook_id' }, function() {
-            this.route('notes', { path: '/notes/:note_id' });
-        });
-    });
+  this.route('register');
+  this.route('login');
+  this.route('notebooks', function() {
+      this.route('view', { path: '/:notebook_id' }, function() {
+          this.route('notes', { path: '/notes/:note_id' });
+      });
+  });
+  this.route('employeetypes', function() {
+    this.route('view',{ path: '/:employeetype_id' });
+  });
 });
 
 export default Router;
