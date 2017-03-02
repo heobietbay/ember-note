@@ -6,14 +6,7 @@ import config from './config/environment';
 let App;
 
 Ember.onerror = function(error) {
-	console.dir(error);
-    /*Ember.$.ajax('/error-notification', {
-        type: 'POST',
-        data: {
-            stack: error.stack,
-            otherInformation: 'exception message'
-        }
-    });*/
+	console.error(error);
 };
 
 Ember.MODEL_FACTORY_INJECTIONS = true;

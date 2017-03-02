@@ -1,0 +1,31 @@
+<div>
+	<div class="col-md-6">
+		<h3>Employee Maintenance</h3>
+	<div>
+		<div>
+			<strong class="col-md-4">Name: </strong>{{input value=name}}
+			<button {{action 'add'}}>Add</button>
+		</div>
+
+		<p style="margin-top: 4px">
+		<strong class="col-md-4">Type:</strong>
+		{{#x-select value=employeeType as |xs|}}			
+			{{#each model.employeetypes as |employeetype|}}
+			  {{#xs.option value=employeetype}} {{employeetype.name}}  {{/xs.option}}
+			{{/each}}
+		{{/x-select}}
+		</p>
+
+	</div>
+	<p>
+		<h4>Current employee list:</h4>
+		<ul>
+		{{#each model.employees as |employee|}}		
+			<li>{{employee.name}}</li>
+		{{else}}
+			<div>No one works for us yet.</div>
+		{{/each}}
+		</ul>
+	</p>
+	</div>
+</div>

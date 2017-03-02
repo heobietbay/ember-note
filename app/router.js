@@ -17,6 +17,7 @@ Router.map(function() {
   this.route('employeetypes', function() {
     this.route('view',{ path: '/:employeetype_id' });
   });
+  this.route('employees');
 });
 
 export default Router;
