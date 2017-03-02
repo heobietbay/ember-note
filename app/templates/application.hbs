@@ -4,14 +4,13 @@
 			<h2>Welcome to EmberNote</h2>
 		</div>
 		<div class="col-md-8">
+		{{#link-to 'index'}}Home{{/link-to}}
 		{{#if user}}
 			Hello {{user.name}}
 		{{/if}}
 
-		{{#unless user}}
-			{{#link-to 'register'}}Register{{/link-to}} &nbsp;
-			{{#link-to 'login'}}Login{{/link-to}} &nbsp;
-		{{/unless}}
+		{{#link-to 'register'}}Register{{/link-to}} &nbsp;
+		{{#link-to 'login'}}Login{{/link-to}} &nbsp;
 		{{#link-to 'employeetypes'}}Employee Types{{/link-to}}
 		</div>
 	</div>
