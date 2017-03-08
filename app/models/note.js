@@ -5,6 +5,11 @@ export default DS.Model.extend({
     body: DS.attr('string'),
     notebook: DS.belongsTo('notebook'),
     totalLength: Ember.computed('title', 'body', function() {
-        return this.get('title').length + this.get('body').length;
+    	let title = this.get('title');
+    	let body = this.get('body');
+
+    	var len = (title || { length :  0 }).length + (body || { length :  0 }).length ;
+
+        return len;
     })
 });

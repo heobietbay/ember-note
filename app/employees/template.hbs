@@ -9,9 +9,9 @@
 
 		<p style="margin-top: 4px">
 		<strong class="col-md-4">Type:</strong>
-		{{#x-select value=employeeType as |xs|}}			
-			{{#each model.employeetypes as |employeetype|}}
-			  {{#xs.option value=employeetype}} {{employeetype.name}}  {{/xs.option}}
+		{{#x-select value=employeeType on-change=(route-action 'setEmployeeType') as |xs|}}			
+			{{#each model.employeetypes as |employeetypeOption|}}
+			  {{#xs.option value=employeetypeOption}} {{employeetypeOption.name}} {{/xs.option}}
 			{{/each}}
 		{{/x-select}}
 		</p>
