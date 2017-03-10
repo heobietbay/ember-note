@@ -8,29 +8,34 @@ export default baseroute.extend({
     model: function() {
         return Ember.RSVP.hash({
             employeetypes: this.store.findAll('employeetype'),
-            employees: this.store.findAll('employee')
+            employees: this.store.findAll('employee'),
+            sortDefinition:['name:desc'],
+            sortedEmployeeTypes: Ember.computed.sort('employeetypes','sortDefinition' )
         });
     },
 
-    setupController(controller, model) {
-        controller.set('employeeType', model.employeetypes.objectAt(0));
-        this._super(controller, model);
+    afterModel(resolvedModel, transition) {
+        this.modelFor(this.routeName).selectedEmployeeType = resolvedModel.employeetypes.objectAt(0);
     },
+
+    setupController: function(controller, model) {
+        this._super(controller,model);
+    },
+
     actions: {
         setEmployeeType(value /*, event */ ) {
             console.log(value);
-            this.controller.set('employeeType', value);
+            this.modelFor(this.routeName).selectedEmployeeType = value;
         },
         add: function() {
             var employee = this.store.createRecord('employee', {
                 name: this.controller.get('name'),
-                employeeType: this.controller.get('employeeType')
+                employeeType: this.currentModel.selectedEmployeeType
             });
             console.log('About to save employee', employee);
             employee.save().then(() => {
                 console.log('save successful');
                 this.controller.set('name', null);
-                this.refresh();
             }, function() {
                 console.log('save failed');
             });

@@ -13,17 +13,27 @@
 			{{#each model.employeetypes as |employeetypeOption|}}
 			  {{#xs.option value=employeetypeOption}} {{employeetypeOption.name}} {{/xs.option}}
 			{{/each}}
+			{{#xs.option value=null}}{{/xs.option}}
 		{{/x-select}}
 		</p>
 
 	</div>
 	<p>
-		<h4>Current employee list:</h4>
-		<ul>
-		{{#each model.employees as |employee|}}		
-			<li>{{employee.name}}</li>
-		{{else}}
-			<div>No one works for us yet.</div>
+		<h4>Current employee list: 
+			<button type="button" class="btn btn-default">
+  				<span aria-hidden="true">Sort</span>
+			</button>
+		</h4>
+		<ul>		
+		{{#each model.sortedEmployeeTypes as |employeeType|}}		
+			<li>
+			{{employeeType.name}}
+			<ul>
+				{{#each employeeType.employees as |employee|}}		
+					<li>{{employee.name}}</li>
+				{{/each}}
+			</ul>
+			</li>
 		{{/each}}
 		</ul>
 	</p>
