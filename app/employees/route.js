@@ -9,7 +9,12 @@ export default baseroute.extend({
         return Ember.RSVP.hash({
             employeetypes: this.store.findAll('employeetype'),
             employees: this.store.findAll('employee'),
-            sortDefinition:['name:desc'],
+            sortDefinition:Ember.computed('sortDesc',function(){
+                let attribute = 'name';
+                let order = this.sortDesc ? 'desc' : 'asc';
+                return [attribute + ':' + order];
+            }),
+            sortDesc: true,
             sortedEmployeeTypes: Ember.computed.sort('employeetypes','sortDefinition' )
         });
     },
@@ -26,6 +31,10 @@ export default baseroute.extend({
         setEmployeeType(value /*, event */ ) {
             console.log(value);
             this.modelFor(this.routeName).selectedEmployeeType = value;
+        },
+        toogleSorting: function() {
+            //TODO: why do we need Ember.set here?
+            Ember.set(this.currentModel,'sortDesc',!this.currentModel.sortDesc);
         },
         add: function() {
             var employee = this.store.createRecord('employee', {
