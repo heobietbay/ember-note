@@ -9,11 +9,11 @@
 
 		<p style="margin-top: 4px">
 		<strong class="col-md-4">Type:</strong>
-		{{#x-select value=employeeType on-change=(route-action 'setEmployeeType') as |xs|}}			
+		{{#x-select value=employeeType on-change=(route-action 'setEmployeeType') as |xs|}}
+			{{#xs.option value=null}}{{/xs.option}}			
 			{{#each model.employeetypes as |employeetypeOption|}}
 			  {{#xs.option value=employeetypeOption}} {{employeetypeOption.name}} {{/xs.option}}
 			{{/each}}
-			{{#xs.option value=null}}{{/xs.option}}
 		{{/x-select}}
 		</p>
 
@@ -26,13 +26,16 @@
 		</h4>
 		<ul>		
 		{{#each model.sortedEmployeeTypes as |employeeType|}}		
-			<li>
-			{{employeeType.name}}
-			<ul>
-				{{#each employeeType.employees as |employee|}}		
+			<li><strong>{{employeeType.name}}</strong>
+				<ul>
+				{{#if employeeType.employees }}
+					{{#each employeeType.employees as |employee|}}		
 					<li>{{employee.name}}</li>
-				{{/each}}
-			</ul>
+					{{/each}}
+				{{else}}				
+				<li>No {{employeeType.name}} hired yet.</li>
+			{{/if}}
+				</ul>
 			</li>
 		{{/each}}
 		</ul>
