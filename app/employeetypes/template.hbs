@@ -1,14 +1,17 @@
 <div>
 	<div class="col-md-6">
 		<h3>Employee Type Maintenance</h3>
-	<div>
+	<p>
 		<strong>Name: </strong>{{input value=name}}
 		<button {{action 'add'}}>Add</button>
-	</div>
-	<p>
+	</p>
+	<p>		
 		<h4>Current employee types:</h4>
+		<p>Filter using ember input helper: {{input value=model.filterName}}</p>
+		<p>Filter using html input tag: 
+			<input type="text" value={{model.filterName}} onblur={{route-action 'filterNameValueChange'}} /> </p>
 		<ul>
-		{{#each model as |employeeType|}}		
+		{{#each model.filterEmployeeTypes as |employeeType|}}		
 			<li>{{employeeType.name}}</li>
 		{{else}}
 			<div>No types found</div>

@@ -43,7 +43,7 @@ export default baseroute.extend({
         },
         add: function() {
             var employee = this.store.createRecord('employee', {
-                name: this.controller.get('name'),
+                name: this.currentModel.name,
                 employeeType: this.currentModel.selectedEmployeeType
             });
             console.log('About to save employee', employee);
